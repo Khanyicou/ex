@@ -1,0 +1,76 @@
+package com.exam.guiapp;
+
+import javax.swing.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class ProductAppFrame extends javax.swing.JFrame {
+
+    public ProductAppFrame() {
+        initComponents();
+    }
+
+    private void processSalesData() {
+        try {
+            String customerName = txtCustomerName.getText().trim();
+            String productName = cmbProduct.getSelectedItem().toString();
+            double price = Double.parseDouble(txtPrice.getText().trim());
+
+            ProductCalculations calc = new ProductCalculations(price);
+            double vat = calc.GetVat();
+            double commission = calc.GetCommission();
+            double total = calc.GetTotal();
+
+            // Display Message Dialog matching screenshot
+            String message = "Customer Name: " + customerName + "\n" +
+                             "Product: " + productName + "\n" +
+                             "VAT: R " + String.format("%.1f", vat) + "\n" +
+                             "COMMISSION: R " + String.format("%.1f", commission) + "\n" +
+                             "TOTAL: R " + String.format("%.1f", total);
+            
+            JOptionPane.showMessageDialog(this, message, "Message", JOptionPane.INFORMATION_MESSAGE);
+
+            // Save to data.txt file
+            try (PrintWriter writer = new PrintWriter(new FileWriter("data.txt", true))) {
+                writer.println("*********************************************");
+                writer.println("Customer Name: " + customerName);
+                writer.println("Product: " + productName);
+                writer.println("VAT: R " + String.format("%.1f", vat));
+                writer.println("COMMISSION: R " + String.format("%.1f", commission));
+                writer.println("TOTAL: R " + String.format("%.1f", total));
+                writer.println("*********************************************");
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error writing to file!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid numeric price.", "Input Error", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void clearFields() {
+        txtCustomerName.setText("");
+        txtPrice.setText("");
+        cmbProduct.setSelectedIndex(0);
+    }
+
+    // Event wiring for buttons and menus
+    private void btnProcessActionPerformed(java.awt.event.ActionEvent evt) {
+        processSalesData();
+    }
+
+    private void mnuProcessActionPerformed(java.awt.event.ActionEvent evt) {
+        processSalesData();
+    }
+
+    private void mnuClearActionPerformed(java.awt.event.ActionEvent evt) {
+        clearFields();
+    }
+
+    private void mnuExitActionPerformed(java.awt.event.ActionEvent evt) {
+        System.exit(0);
+    }
+
+    // Standard NetBeans components initialization method stub omitted for brevity
+}
