@@ -1,0 +1,64 @@
+package com.exam.productapp;
+
+public interface IProduct {
+    int GetTotalProductSold();
+    double GetAverageProductSold();
+    String GetMostPopularProduct();
+}
+```[cite: 3]
+
+### Step 2: Create the `Product` Class (`Product.java`)
+Right-click package -> **New > Java Class** -> Name it `Product`. This class implements `IProduct` and handles the 2D array logic for sales calculations[cite: 2, 4].
+
+```java
+package com.exam.productapp;
+
+public class Product implements IProduct {
+    private int[][] salesData;
+    private String[] productNames;
+
+    // Constructor to initialize products and sales data
+    public Product(int[][] salesData, String[] productNames) {
+        this.salesData = salesData;
+        this.productNames = productNames;
+    }
+
+    @Override
+    public int GetTotalProductSold() {
+        int total = 0;
+        for (int i = 0; i < salesData.length; i++) {
+            for (int j = 0; j < salesData[i].length; j++) {
+                total += salesData[i][j];
+            }
+        }
+        return total;
+    }
+
+    @Override
+    public double GetAverageProductSold() {
+        int total = GetTotalProductSold();
+        int count = 0;
+        for (int i = 0; i < salesData.length; i++) {
+            count += salesData[i].length;
+        }
+        return count == 0 ? 0.0 : (double) total / count;
+    }
+
+    @Override
+    public String GetMostPopularProduct() {
+        int maxSales = -1;
+        int bestProductIndex = 0;
+
+        for (int i = 0; i < salesData.length; i++) {
+            int productTotal = 0;
+            for (int j = 0; j < salesData[i].length; j++) {
+                productTotal += salesData[i][j];
+            }
+            if (productTotal > maxSales) {
+                maxSales = productTotal;
+                bestProductIndex = i;
+            }
+        }
+        return productNames[bestProductIndex] + " (" + maxSales + ")";
+    }
+}
