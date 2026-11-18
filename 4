@@ -1,0 +1,31 @@
+package com.exam.productapp;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class ProductTest {
+
+    @Test
+    public void GetTotalProductSales_WithValidData_ReturnsCorrectValue() {
+        int[][] testData = {
+            {25, 18, 20},
+            {15, 10, 12},
+            {18, 15, 20}
+        };
+        String[] names = {"A", "B", "C"};
+        Product product = new Product(testData, names);
+        assertEquals(153, product.GetTotalProductSold());
+    }
+
+    @Test
+    public void GetAverageSales_WithValidData_ReturnsCorrectValue() {
+        int[][] testData = {
+            {25, 18, 20},
+            {15, 10, 12},
+            {18, 15, 20}
+        };
+        String[] names = {"A", "B", "C"};
+        Product product = new Product(testData, names);
+        assertEquals(17.0, product.GetAverageProductSold(), 0.001);
+    }
+}
